@@ -21,16 +21,12 @@ class WithdrawOrDepositError(Exception):
     self.amount = amount
     self.location = location
 
-  def track_issue(self):
-    if self.in_or_out != 'deposit' and self.in_or_out != 'withdraw':
-      raise DepositOrWithDrawError(self.in_or_out)
-    # elif self.amount
 
 class DepositLocationError(Exception):
   def __init__(self):
     pass
 
-class WithdrawExceedsBalance(Exception):
+class AmountExceedsBalance(Exception):
   def __init__(self):
     pass
 
@@ -38,5 +34,8 @@ class AccountNotWanted(Exception):
  def __init__(self):
     pass
 
+class UnknownRecognizedPaymentOrigin(Exception):
+  def __init__(self):
+    pass
 
     

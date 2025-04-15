@@ -15,7 +15,7 @@ class UserInteraction:
   
   def get_user_banking_info(self, reentry):
     no_account_wanted = 'Thank you for your time, feel free to come back and open an account at anytime!'
-    opening_question = 'Y'
+    opening_question = 'Welcome, I see you are new to our bank, would you like to create a bank account?\n [Y/N]: '
     y_answers = ['yes', 'y', 'yse']
     n_answers = ['no', 'n']
 

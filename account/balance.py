@@ -16,10 +16,20 @@ class Balance():
     self.withdraw_deposit_userdict['deposit'] = amount
     self.balance += amount
 
+  def withdraw(self, amount):
+    try:
+      self.check_balance(self.balance, amount)
+      self.withdraw_deposit_userdict['withdraw'] = amount
+      self.balance -= amount
+    except require_support.AmountExceedsBalance as e:
+      print(e)
+
+
+
   def check_balance(self, balance, amount):
-    #^ called before making a withdraw to make sure it wont exceed the balance
+    #^ called before making a withdraw or transaction to make sure it wont exceed the balance
       if amount > balance:
-        raise require_support.WithdrawExceedsBalance()
+        raise require_support.AmountExceedsBalance()
   
 
 class WithdrawsAndDeposits(UserDict):
@@ -76,6 +86,35 @@ class WithdrawsAndDeposits(UserDict):
       else:
         raise require_support.DepositLocationError()
 
+
+class Transactions:
+
+  def __init__(self):
+    self.data = {}
+    self.id = 0
+
+    self.transaction_logger = logging.getLogger(__name__)
+    self.transaction_logger.setLevel(logging.DEBUG)
+    logging.basicConfig(level=logging.INFO, format='[%(filename)s - %(funcName)s - %(levelname)s - %(lineno)s] \n%(message)s \n')
+
+  def __setitem__(self, payment_type, amount):
+    current_time = datetime.datetime.now().strftime('%A, %B %d, %Y')
+    origin = self.get_transaction_origin(payment_type)
+    Transaction = namedtuple('Transaction', ['payment_type', 'amount', 'origin', 'current_time'])
+
+    self.data[id] = Transaction(payment_type, -1*amount, origin, current_time)
+    self.transaction_logger.info('Transaction: {id} \nInfo namedtuple contents:\n- Payment type: {type} \n- Amount: ${amount} \n- Origin: {location} \n- Time: {time}'.format(id=self.id, payment_type=payment_type, amount=amount, origin=origin, time=current_time))
+    id += 1
+
+
+  def get_transaction_origin(self, payment_type):
+    origions = ['Save on Foods', 'Costco', 'Walmart', 'Lululemon', 'Sketchy store', 'Sketchy website']
+    if payment_type in {'online', 'electronic_wallet', 'physical_card'}:
+      return origions[random.randint(0, 3)]
+    else:
+      raise require_support.UnknownRecognizedPaymentOrigin
+     
+    
    
       
 

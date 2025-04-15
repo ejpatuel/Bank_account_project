@@ -75,6 +75,26 @@ class TestBalance(unittest.TestCase):
       self.test_withdraw_and_deposit['withdraw'] = withdraw_amount
     testing_logger.info(self.test_balance.withdraw_deposit_userdict)
 
+class TestDepositWithdrawInteraction(unittest.TestCase):
+
+  def reset_classes(self):
+    self.test_account = BankAccountLogistics('John', 0)
+    self.test_withdraw_and_deposit = balance.WithdrawsAndDeposits()
+    self.test_balance = balance.Balance(self.test_account.account_owner, self.test_account.daily_withdraw_limit, self.test_withdraw_and_deposit)
+
+  def test_balance_update(self):
+    deposit_withdraw_balance = [[100, 40, 60], [1000, 20, 980], [50, 48, 2]]
+    for values in deposit_withdraw_balance:
+      self.reset_classes()
+      with self.subTest(values):
+        with patch('builtins.input', side_effect = values) as ptch:
+          deposit = input()
+          withdraw = input()
+          self.test_balance.deposit(deposit)
+          self.test_balance.withdraw(withdraw)
+          testing_logger.info('Deposit: {deposit}\nWithdraw: {withdraw}\nBalance: {balance}'.format(deposit=deposit, withdraw=withdraw, balance=self.test_balance.balance))
+          self.assertEqual(self.test_balance.balance, input())
+
 class TestBalanceExceptions(unittest.TestCase):
   #This test class and TestBalance are very similar but for clarity the test in this class has its own class otherwise I would have to add unnecessary confusing logic to adjust the balances to test for the withdra excpetion
   @classmethod
@@ -85,7 +105,7 @@ class TestBalanceExceptions(unittest.TestCase):
     self.test_balance = balance.Balance(self.test_account.account_owner, self.test_account.daily_withdraw_limit, self.test_withdraw_and_deposit)
 
   def test_WithdrawExceedsBalance(self):
-      with self.assertRaises(require_support.WithdrawExceedsBalance):
+      with self.assertRaises(require_support.AmountExceedsBalance):
         #^ testing for the exception above
         self.test_withdraw_and_deposit['deposit'] = 100
         withdraw_amount = 5000
