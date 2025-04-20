@@ -15,7 +15,7 @@ class UserInteraction:
   
   def get_user_banking_info(self, reentry):
     no_account_wanted = 'Thank you for your time, feel free to come back and open an account at anytime!'
-    opening_question = 'Welcome, I see you are new to our bank, would you like to create a bank account?\n [Y/N]: '
+    opening_question = 'Y'
     y_answers = ['yes', 'y', 'yse']
     n_answers = ['no', 'n']
 
@@ -23,8 +23,8 @@ class UserInteraction:
       opening_question = input('Welcome, I see you are new to our bank, would you like to create a bank account?\n [Y/N]: ')
       
     if opening_question.lower() in n_answers:
-      raise AccountNotWanted
-      print(no_account_wanted)
+      # raise AccountNotWanted
+      # print(no_account_wanted)
       return
 
     if reentry == False:

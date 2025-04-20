@@ -3,10 +3,13 @@ from account import BankAccountLogistics
 import require_support 
 import balance 
 from unittest.mock import patch
-import user_interaction 
+import atm_store
+# import user_interaction 
+# import curse_ui
+# import curses
 
 testing_logger = logging.getLogger(__name__)
-testing_logger.setLevel(logging.DEBUG)
+testing_logger.setLevel(logging.INFO)
 #^ set logging level for file
 logging.basicConfig(level=logging.INFO, format='[%(filename)s - %(funcName)s - %(levelname)s - %(lineno)s]\n%(message)s \n ')
 
@@ -62,7 +65,7 @@ class TestBalance(unittest.TestCase):
       self.test_balance.deposit(input())
       #^ method to add the deposits to the balance
       print('Balance: '+ str(self.test_balance.balance))
-    testing_logger.info(self.test_balance.withdraw_deposit_userdict)
+    testing_logger.debug(self.test_balance.withdraw_deposit_userdict)
     
       
   @patch('builtins.input', side_effect = [10, 100, 50])
@@ -73,7 +76,8 @@ class TestBalance(unittest.TestCase):
       #^ method to make sure withdraw doesnt excees balance
       # in the deposit test right before this one we ensure the balance is high enough to make all withdrawls in side_effect
       self.test_withdraw_and_deposit['withdraw'] = withdraw_amount
-    testing_logger.info(self.test_balance.withdraw_deposit_userdict)
+    testing_logger.debug(self.test_balance.withdraw_deposit_userdict)
+
 
 class TestDepositWithdrawInteraction(unittest.TestCase):
 
@@ -92,7 +96,7 @@ class TestDepositWithdrawInteraction(unittest.TestCase):
           withdraw = input()
           self.test_balance.deposit(deposit)
           self.test_balance.withdraw(withdraw)
-          testing_logger.info('Deposit: {deposit}\nWithdraw: {withdraw}\nBalance: {balance}'.format(deposit=deposit, withdraw=withdraw, balance=self.test_balance.balance))
+          testing_logger.debug('Deposit: {deposit}\nWithdraw: {withdraw}\nBalance: {balance}'.format(deposit=deposit, withdraw=withdraw, balance=self.test_balance.balance))
           self.assertEqual(self.test_balance.balance, input())
 
 class TestBalanceExceptions(unittest.TestCase):
@@ -112,17 +116,24 @@ class TestBalanceExceptions(unittest.TestCase):
         self.test_balance.check_balance(self.test_balance.balance, withdraw_amount)
         self.test_withdraw_and_deposit['withdraw'] = withdraw_amount
 
-class TestUserInteraction(unittest.TestCase):
 
-    def test_get_banking_info(self):
-      lsts = [['Y', 'John Doe', 1000, 'Y'], ['y', 'Emily Blunt', 1000, 'y'], ['YES', 'Gronnt Gibly', 4000, 'YES'], ['yes', 'Preia June', 4000, 'yes']]
-      for lst in lsts:
-        with self.subTest(lst):
-          with patch('builtins.input', side_effect = lst) as ptch:
-            self.user_interaction = user_interaction.UserInteraction()
-            testing_logger.info('Account owner: {owner}\nDaily withdrawl limit: {limit}'.format(owner=self.user_interaction.account.account_owner, limit=self.user_interaction.account.daily_withdraw_limit))
+# class TestTransactionsAndShopping(unittest.TestCase):
 
-  
+#   @classmethod
+#   def setUpClass(self):
+#     self.store = atm_store.Store()
+
+#   def test_store_and_transactions_dict(self):
+#     for test in range(4):
+#       item, price = self.store.purchase_and_display()
+#       with self.subTest(price):
+#         self.assertIn(price, self.store.purchases.values().Transaction.amount)
+
+
+
+    
+
+
 
     
 

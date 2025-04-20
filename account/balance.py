@@ -13,11 +13,13 @@ class Balance():
 
   def deposit(self, amount):
     #^ methode stores activity in withdraw_deposit_userdict and adjusts the balance here
+    amount = float(amount)
     self.withdraw_deposit_userdict['deposit'] = amount
     self.balance += amount
 
   def withdraw(self, amount):
     try:
+      amount = float(amount)
       self.check_balance(self.balance, amount)
       self.withdraw_deposit_userdict['withdraw'] = amount
       self.balance -= amount
@@ -45,6 +47,7 @@ class WithdrawsAndDeposits(UserDict):
 
   def __setitem__(self, in_or_out, amount):
     #^ overriding method
+    
     current_time = datetime.datetime.now().strftime('%A, %B %d, %Y')
     cash_or_online = ['cash', 'online']
     location = self.get_activity_location(cash_or_online[random.randint(0, 1)])
@@ -87,7 +90,8 @@ class WithdrawsAndDeposits(UserDict):
         raise require_support.DepositLocationError()
 
 
-class Transactions:
+class Transactions(UserDict):
+#^ A userdict to hold a history of the users transactions. 
 
   def __init__(self):
     self.data = {}
@@ -101,14 +105,17 @@ class Transactions:
     current_time = datetime.datetime.now().strftime('%A, %B %d, %Y')
     origin = self.get_transaction_origin(payment_type)
     Transaction = namedtuple('Transaction', ['payment_type', 'amount', 'origin', 'current_time'])
+    #^ to store the transaction detials 
 
-    self.data[id] = Transaction(payment_type, -1*amount, origin, current_time)
-    self.transaction_logger.info('Transaction: {id} \nInfo namedtuple contents:\n- Payment type: {type} \n- Amount: ${amount} \n- Origin: {location} \n- Time: {time}'.format(id=self.id, payment_type=payment_type, amount=amount, origin=origin, time=current_time))
-    id += 1
+    self.data[self.id] = Transaction(payment_type, -1*amount, origin, current_time)
+    #^ adds entry to dict
+    self.transaction_logger.info('Transaction: {id} \nInfo namedtuple contents:\n- Payment type: {payment_type} \n- Amount: ${amount} \n- Origin: {origin} \n- Time: {time}'.format(id=str(self.id), payment_type=payment_type, amount=str(amount), origin=origin, time=current_time))
+    self.id += 1
 
 
   def get_transaction_origin(self, payment_type):
-    origions = ['Save on Foods', 'Costco', 'Walmart', 'Lululemon', 'Sketchy store', 'Sketchy website']
+    #^ helper method to generate a random location to assign to a purchase (would be a real loation but this is just a simulation)
+    origions = ['Save on Foods', 'Costco', 'Best Buy', 'Lululemon', 'Sketchy store', 'Sketchy website']
     if payment_type in {'online', 'electronic_wallet', 'physical_card'}:
       return origions[random.randint(0, 3)]
     else:
