@@ -2,6 +2,7 @@ import random
 import balance
 
 class Store:
+    #^ simulates buying items to work with transaction dict
     def __init__(self):
         self.items = ['pants', 'toy', 'phone', 'bowl', 'pot']
         self.purchases = balance.Transactions()
@@ -15,9 +16,6 @@ class Store:
     def purchase(self, item, price):
         self.purchases['online'] = price
         
-       
 
-# test = Store()
-# test.purchase_and_display()
 
         

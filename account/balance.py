@@ -31,7 +31,7 @@ class Balance():
   def check_balance(self, balance, amount):
     #^ called before making a withdraw or transaction to make sure it wont exceed the balance
       if amount > balance:
-        raise require_support.AmountExceedsBalance()
+        raise require_support.AmountExceedsBalance(amount, balance)
   
 
 class WithdrawsAndDeposits(UserDict):
@@ -86,8 +86,7 @@ class WithdrawsAndDeposits(UserDict):
         #emualtes some sort of general location getter
         get_general_location = ['Canada, BC', 'South Africa, Johannesburd', 'Canada, Alberta', 'Italy']
         return get_general_location[random.randint(0, 3)]
-      else:
-        raise require_support.DepositLocationError()
+   
 
 
 class Transactions(UserDict):
@@ -118,8 +117,7 @@ class Transactions(UserDict):
     origions = ['Save on Foods', 'Costco', 'Best Buy', 'Lululemon', 'Sketchy store', 'Sketchy website']
     if payment_type in {'online', 'electronic_wallet', 'physical_card'}:
       return origions[random.randint(0, 3)]
-    else:
-      raise require_support.UnknownRecognizedPaymentOrigin
+
      
     
    

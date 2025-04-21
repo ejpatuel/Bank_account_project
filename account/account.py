@@ -34,7 +34,7 @@ class BankAccountLogistics:
     self.setter_logger.info('self.__account_owner attempting to be set to: {owner}'.format(owner=account_owner))
     self.__account_owner = str(account_owner).strip()
     if self.account_owner == '':
-      raise require_support.AccountOwnerEmpty(account_owner)
+      raise require_support.AccountOwnerEmpty(account_owner, self.account_owner)
     else: pass
 
   #the daily withdrawel limit must be above zero. If it is not we raise a cutom exception

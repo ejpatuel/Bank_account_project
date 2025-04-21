@@ -10,9 +10,13 @@ class WithdrawlLimitBelowZero(Exception):
       
 
 class AccountOwnerEmpty(Exception):
-  def __init__(self, account_owner):
-    self.account_owner = account_owner
-    logger.warning('AccountOwnerError exception raised with account_owner value of: {value}'.format(value=account_owner))
+  def __init__(self, new_owner, old_owner):
+    self.new_owner = new_owner
+    self.old_owner = old_owner
+    logger.warning('AccountOwnerError exception raised with account_owner value of: {value}'.format(value=new_owner))
+
+  def __str__(self):
+    return 'Attempting to change account owner of {og_owner} to {new_owner}, but an issues was encountered'.format(og_owner=self.old_owner, new_owner=self.new_owner)
 
 class WithdrawOrDepositError(Exception):
   def __init__(self, in_or_out, amount, location):
@@ -21,18 +25,18 @@ class WithdrawOrDepositError(Exception):
     self.amount = amount
     self.location = location
 
+  def __str__(self):
+    return 'An error occured withing the WithdrawsAndDeposits userdict when attempting to log a {in_or_out} of ${amount}, at {location}'.format(in_or_out=self.in_or_out, amount=self.amount, location=self.location)
 
-class DepositLocationError(Exception):
-  def __init__(self):
-    pass
 
 class AmountExceedsBalance(Exception):
-  def __init__(self):
-    pass
+  def __init__(self, amount, balance):
+    self.amount = amount
+    self.balance = balance
 
-class AccountNotWanted(Exception):
- def __init__(self):
-    pass
+  def __str__(self):
+    return 'You are attempting to withdraw an amount of ${amount}, with an insufficient balance of ${balanace}.'.format(amount=self.amount, balance=self.balance)
+
 
 class UnknownRecognizedPaymentOrigin(Exception):
   def __init__(self):
